@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>観光＆動物園ガイド</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f9f0;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2e7d32, #66bb6a);
+      color: white;
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    header h1 { font-size: 2rem; }
+    header p { font-size: 1rem; opacity: 0.85; }
+
+    nav {
+      background: #1b5e20;
+      display: flex;
+      gap: 4px;
+      padding: 0 40px;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: #c8e6c9;
+      padding: 14px 24px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    nav button:hover, nav button.active {
+      color: white;
+      border-bottom-color: #a5d6a7;
+    }
+
+    main { padding: 40px; max-width: 1200px; margin: 0 auto; }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    h2 { font-size: 1.6rem; margin-bottom: 24px; color: #2e7d32; }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      font-size: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e8f5e9;
+    }
+
+    .card-body { padding: 16px; }
+    .card-body h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .card-body p { font-size: 0.9rem; color: #666; line-height: 1.5; }
+
+    .badge {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-top: 10px;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, #a5d6a7, #66bb6a);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+
+    .hero-banner h2 { color: white; font-size: 2rem; margin-bottom: 8px; }
+    .hero-banner p { font-size: 1.1rem; opacity: 0.9; }
+
+    .map-placeholder {
+      background: #e8f5e9;
+      border: 2px dashed #81c784;
+      border-radius: 12px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: #4caf50;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .info-box {
+      background: white;
+      border-left: 4px solid #4caf50;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    }
+
+    .info-box .label { font-size: 0.8rem; color: #888; margin-bottom: 4px; }
+    .info-box .value { font-size: 1.1rem; font-weight: 600; color: #2e7d32; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      background: #1b5e20;
+      color: #a5d6a7;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="font-size:2.5rem">🌿</div>
+  <div>
+    <h1>観光＆動物園ガイド</h1>
+    <p>自然と動物とふれあう旅へ</p>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('home', this)">ホーム</button>
+  <button onclick="showSection('zoo', this)">動物園</button>
+  <button onclick="showSection('sightseeing', this)">観光スポット</button>
+  <button onclick="showSection('access', this)">アクセス・情報</button>
+</nav>
+
+<main>
+
+  <!-- ホーム -->
+  <section id="home" class="section active">
+    <div class="hero-banner">
+      <h2>ようこそ！</h2>
+      <p>動物たちとの出会い、自然の絶景、地域の文化をお楽しみください。</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="label">開園時間</div>
+        <div class="value">9:00 〜 17:00</div>
+      </div>
+      <div class="info-box">
+        <div class="label">入園料（大人）</div>
+        <div class="value">¥1,200</div>
+      </div>
+      <div class="info-box">
+        <div class="label">入園料（子ども）</div>
+        <div class="value">¥600</div>
+      </div>
+      <div class="info-box">
+        <div class="label">休園日</div>
+        <div class="value">毎週月曜日</div>
+      </div>
+    </div>
+
+    <h2>おすすめピックアップ</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-img">🦁</div>
+        <div class="card-body">
+          <h3>ライオンの丘</h3>
+          <p>百獣の王をガラス越しに間近で観察できる大人気エリア。</p>
+          <span class="badge">動物園</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🌸</div>
+        <div class="card-body">
+          <h3>桜並木プロムナード</h3>
+          <p>春には満開の桜が咲き誇る、園内随一の絶景散策路。</p>
+          <span class="badge">観光</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🐼</div>
+        <div class="card-body">
+          <h3>パンダ館</h3>
+          <p>愛らしいジャイアントパンダが暮らす特別展示エリア。</p>
+          <span class="badge">動物園</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 動物園 -->
+  <section id="zoo" class="section">
+    <h2>動物園エリア</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-img">🐘</div>
+        <div class="card-body">
+          <h3>アフリカゾーン</h3>
+          <p>ゾウ、キリン、シマウマなどアフリカのサバンナに生きる動物たちが集結。</p>
+          <span class="badge">屋外</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🐧</div>
+        <div class="card-body">
+          <h3>ペンギン水族館</h3>
+          <p>泳ぐペンギンをトンネル水槽で360度観察。子どもに大人気！</p>
+          <span class="badge">屋内</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🦒</div>
+        <div class="card-body">
+          <h3>キリン広場</h3>
+          <p>高い視点からキリンに葉っぱを直接あげる体験ができます。</p>
+          <span class="badge">体験</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🐍</div>
+        <div class="card-body">
+          <h3>爬虫類館</h3>
+          <p>世界中の珍しい爬虫類が暮らす神秘的な屋内展示。</p>
+          <span class="badge">屋内</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🦜</div>
+        <div class="card-body">
+          <h3>熱帯鳥類温室</h3>
+          <p>色鮮やかな熱帯の鳥たちが飛び交う大型温室ドーム。</p>
+          <span class="badge">屋内</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🐨</div>
+        <div class="card-body">
+          <h3>コアラの森</h3>
+          <p>ユーカリの木でのんびり過ごすコアラを観察しよう。</p>
+          <span class="badge">屋外</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 観光スポット -->
+  <section id="sightseeing" class="section">
+    <h2>周辺観光スポット</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-img">⛩️</div>
+        <div class="card-body">
+          <h3>緑樹神社</h3>
+          <p>樹齢500年の大樹に囲まれた静寂の神社。パワースポットとして人気。</p>
+          <span class="badge">文化</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🏔️</div>
+        <div class="card-body">
+          <h3>展望台ハイキング</h3>
+          <p>山頂展望台からは市街地と自然を一望。往復約2時間のトレイル。</p>
+          <span class="badge">アウトドア</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🍜</div>
+        <div class="card-body">
+          <h3>地元グルメ横丁</h3>
+          <p>地域の名物料理が集まる屋台通り。地ビールや手作りスイーツも。</p>
+          <span class="badge">グルメ</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🏛️</div>
+        <div class="card-body">
+          <h3>自然博物館</h3>
+          <p>地域の動植物・地質の歴史を学べるインタラクティブ展示が充実。</p>
+          <span class="badge">文化</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🛶</div>
+        <div class="card-body">
+          <h3>湖畔ボートツアー</h3>
+          <p>透明度抜群の湖をボートで巡る1時間のネイチャーツアー。</p>
+          <span class="badge">体験</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🎨</div>
+        <div class="card-body">
+          <h3>アートギャラリー</h3>
+          <p>地域アーティストによる自然をテーマにした作品を常設展示。</p>
+          <span class="badge">文化</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- アクセス -->
+  <section id="access" class="section">
+    <h2>アクセス・基本情報</h2>
+
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="label">住所</div>
+        <div class="value">緑町1-2-3</div>
+      </div>
+      <div class="info-box">
+        <div class="label">電話番号</div>
+        <div class="value">03-1234-5678</div>
+      </div>
+      <div class="info-box">
+        <div class="label">最寄り駅</div>
+        <div class="value">緑公園駅（徒歩5分）</div>
+      </div>
+      <div class="info-box">
+        <div class="label">駐車場</div>
+        <div class="value">200台（有料）</div>
+      </div>
+    </div>
+
+    <h2 style="margin-bottom:16px">地図</h2>
+    <div class="map-placeholder">
+      🗺️　地図がここに表示されます（Google Maps等と連携可能）
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  &copy; 2026 観光＆動物園ガイド. All rights reserved.
+</footer>
+
+<script>
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
