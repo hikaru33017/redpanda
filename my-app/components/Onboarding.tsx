@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import Image from 'next/image'
+import { Mascot } from './Mascot'
 
 interface Props {
   onComplete: () => void
@@ -112,13 +113,17 @@ export function Onboarding({ onComplete }: Props) {
             className="w-40 h-40 rounded-full flex items-center justify-center shadow-2xl"
             style={{ background: `${slide.accent}1A` }}
           >
-            <Image
-              src={slide.icon}
-              alt={slide.iconAlt}
-              width={104}
-              height={104}
-              className="drop-shadow-lg"
-            />
+            {current === 0 ? (
+              <Mascot mood="welcome" size={104} animate={false} />
+            ) : (
+              <Image
+                src={slide.icon}
+                alt={slide.iconAlt}
+                width={104}
+                height={104}
+                className="drop-shadow-lg"
+              />
+            )}
           </div>
         </div>
 

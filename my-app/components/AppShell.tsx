@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Onboarding } from './Onboarding'
 import { BottomNav } from './BottomNav'
+import { Mascot } from './Mascot'
 
 const ONBOARDING_KEY = 'nishiyama-onboarding-done'
 
@@ -23,7 +24,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="flex-1 flex items-center justify-center bg-[var(--color-cream)]">
         <div className="text-center space-y-4">
-          <div className="text-6xl animate-float">🐼</div>
+          <Mascot mood="excited" size={72} />
           <p className="text-[var(--color-bark)]">レッサーパンダが道を調べています…</p>
         </div>
       </div>

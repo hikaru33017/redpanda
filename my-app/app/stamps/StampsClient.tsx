@@ -1,200 +1,377 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { cn } from '@/lib/utils'
+import Link from 'next/link'
+import { SPAWN_POINTS } from '@/lib/spawnPoints'
+import { useGeolocation } from '@/lib/useGeolocation'
+import { calcDistanceMeters } from '@/lib/distance'
+import { CompassGuide } from '@/components/CompassGuide'
 
-const STAMP_KEY = 'nishiyama-stamps'
+const StampMap = dynamic(
+  () => import('@/components/Map').then((m) => m.Map),
+  { ssr: false, loading: () => <div className="w-full h-full" style={{ background: 'var(--color-teal-pale)' }} /> },
+)
+import {
+  loadExplorationState,
+  hasStamped,
+  attemptCheckin,
+  type CheckinResult,
+} from '@/lib/checkin'
+import { getPandaIdBySpot } from '@/lib/spotPandaMapping'
+import { LESSER_PANDAS } from '@/lib/pandaData'
+import { Mascot } from '@/components/Mascot'
+import type { SpawnPoint, ExplorationState } from '@/lib/types'
 
-const STAMPS = [
-  { id: 'hana', name: '花菖蒲園', icon: '/icons/cherry-blossom.svg', desc: '10万本の花菖蒲', color: '#FFF0F5', rare: false },
-  { id: 'jinja', name: '西山神社', icon: '/icons/seedling.svg', desc: '縁結びのパワースポット', color: '#EAF5E2', rare: false },
-  { id: 'zoo', name: '西山動物園', icon: '/icons/lesser-panda.png', desc: 'レッサーパンダの楽園', color: '#E0F7F5', rare: false },
-  { id: 'take', name: '竹林の小径', icon: '/icons/bamboo.svg', desc: '清涼な竹のトンネル', color: '#EAF5E2', rare: false },
-  { id: 'sakura', name: '桜の広場', icon: '/icons/cherry-blossom.svg', desc: '春は満開の花見スポット', color: '#FFF0F5', rare: false },
-  { id: 'tenbodai', name: '展望台', icon: '/icons/star.svg', desc: '越前の山々を一望', color: '#FEF6E4', rare: false },
-  { id: 'suisei', name: '水生植物園', icon: '/icons/fallen-leaf.svg', desc: '四季の水辺の植物', color: '#E6F4FA', rare: false },
-  { id: 'koi', name: '鯉の池', icon: '/icons/paw.svg', desc: '鯉と亀が泳ぐ池', color: '#E0F7F5', rare: false },
-  { id: 'momiji', name: '紅葉スポット', icon: '/icons/fallen-leaf.svg', desc: '秋は真っ赤に染まる', color: '#FEF0E8', rare: true },
-  { id: 'yuki', name: '雪景色の公園', icon: '/icons/star.svg', desc: '冬の幻想的な雪景色', color: '#E6F4FA', rare: true },
-  { id: 'festival', name: 'あやめまつり', icon: '/icons/heart.svg', desc: '年に一度の特別イベント', color: '#F5F0FF', rare: true },
-  { id: 'secret', name: '秘密の場所', icon: '/icons/trophy.svg', desc: '全スタンプ制覇で解放！', color: '#F5F5F5', rare: true },
-]
+function loadState(): ExplorationState {
+  if (typeof window === 'undefined') return { stamps: [], discoveredPandaIds: [] }
+  return loadExplorationState()
+}
 
-export function StampsClient() {
-  const [visited, setVisited] = useState<Set<string>>(() => {
-    if (typeof window === 'undefined') return new Set()
-    const stored = localStorage.getItem(STAMP_KEY)
-    if (!stored) return new Set()
-    try { return new Set(JSON.parse(stored) as string[]) } catch { return new Set() }
-  })
-  const [justStamped, setJustStamped] = useState<string | null>(null)
-  const [showConfetti, setShowConfetti] = useState(false)
+interface DiscoveryOverlayProps {
+  point: SpawnPoint
+  pandaId: string | undefined
+  onClose: () => void
+}
 
-  function handleStamp(id: string) {
-    if (visited.has(id)) return
-    const next = new Set(visited)
-    next.add(id)
-    localStorage.setItem(STAMP_KEY, JSON.stringify([...next]))
-    setVisited(next)
-    setJustStamped(id)
-    setShowConfetti(true)
-    setTimeout(() => { setJustStamped(null); setShowConfetti(false) }, 2000)
-  }
-
-  const count = visited.size
-  const total = STAMPS.filter((s) => s.id !== 'secret').length
-  const allClear = count >= total
+function DiscoveryOverlay({ point, pandaId, onClose }: DiscoveryOverlayProps) {
+  const panda = pandaId ? LESSER_PANDAS.find((p) => p.id === pandaId) : undefined
 
   return (
-    <div className="min-h-screen relative" style={{ background: 'linear-gradient(180deg, #E0F7F5 0%, #FFFBF5 30%, #FEF6ED 100%)' }}>
-      <BookBackground />
+    <div
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 px-8"
+      style={{ background: 'rgba(255,251,245,0.96)', backdropFilter: 'blur(10px)' }}
+      onClick={onClose}
+    >
+      <div className="animate-bounce-in">
+        <Mascot mood="happy" size={120} animate={false} />
+      </div>
+      <div className="text-center">
+        <p className="text-xs font-bold mb-1" style={{ color: 'var(--color-teal-dark)' }}>
+          スタンプゲット！
+        </p>
+        <p className="text-2xl font-extrabold text-[var(--color-foreground)]">
+          {point.facilityName}
+        </p>
+      </div>
+      {panda && (
+        <div onClick={(e) => e.stopPropagation()}>
+          <Link
+            href={`/pandas/${panda.id}`}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-extrabold text-white"
+            style={{ background: 'linear-gradient(135deg, var(--color-primary-light), var(--color-primary))' }}
+          >
+            🐼 {panda.name}について詳しく見る
+          </Link>
+        </div>
+      )}
+      <p className="text-xs opacity-50" style={{ color: 'var(--color-bark)' }}>
+        タップして閉じる
+      </p>
+    </div>
+  )
+}
 
-      {showConfetti && <Confetti />}
+interface SpotRowProps {
+  point: SpawnPoint
+  stamped: boolean
+  selected: boolean
+  userCoords: { lat: number; lng: number } | null
+  distanceMeters: number | null
+  onCheckin: (point: SpawnPoint) => void
+  onSelectTarget: (id: string) => void
+}
 
-      <div className="relative z-10 max-w-lg mx-auto px-4 pt-8">
-        <header className="mb-6">
-          <div className="flex items-center gap-3">
-            <Image src="/icons/trophy.svg" alt="スタンプ帳" width={36} height={36} />
-            <div>
-              <h1 className="text-2xl font-extrabold text-[var(--color-foreground)]">スタンプ帳</h1>
-              <p className="text-xs text-[var(--color-teal-dark)] font-bold mt-0.5">
-                西山公園のスポットを巡って集めよう
-              </p>
-            </div>
-          </div>
-        </header>
+function SpotRow({ point, stamped, selected, userCoords, distanceMeters, onCheckin, onSelectTarget }: SpotRowProps) {
+  const isRare = point.rarity === 'rare'
+  const inRange = distanceMeters !== null && distanceMeters <= point.radiusMeters
+  const coordsNull = point.coords === null
+  const showCompass = !stamped && !inRange && !coordsNull && userCoords !== null && distanceMeters !== null
 
-        <div className="glass-book rounded-3xl p-4 mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-extrabold text-[var(--color-foreground)]">コレクション達成率</span>
-            <span className="text-sm font-extrabold text-[var(--color-teal-dark)]">{count} / {total}</span>
-          </div>
-          <div className="w-full h-3 bg-[var(--color-teal-pale)] rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-700"
-              style={{ width: `${(count / total) * 100}%`, background: 'linear-gradient(90deg, var(--color-teal-light), var(--color-teal))' }}
-            />
-          </div>
-          {allClear && (
-            <div className="mt-3 text-center animate-bounce-in flex items-center justify-center gap-2">
-              <Image src="/icons/trophy.svg" alt="" width={18} height={18} />
-              <p className="text-sm font-extrabold text-[var(--color-teal-dark)]">
-                全スタンプ制覇！おめでとう！
-              </p>
-            </div>
+  return (
+    <div
+      className="flex flex-col rounded-2xl overflow-hidden transition-all"
+      style={{
+        background: stamped
+          ? 'rgba(8,176,163,0.08)'
+          : selected
+          ? 'rgba(200,92,46,0.06)'
+          : 'rgba(255,255,255,0.7)',
+        border: stamped
+          ? '1.5px solid rgba(8,176,163,0.25)'
+          : selected
+          ? '1.5px solid rgba(200,92,46,0.35)'
+          : '1.5px solid rgba(212,169,106,0.2)',
+      }}
+    >
+      <div className="flex items-center gap-3 px-4 py-3">
+        <div
+          className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center"
+          style={{
+            background: stamped
+              ? 'rgba(8,176,163,0.15)'
+              : isRare
+              ? 'rgba(139,92,246,0.10)'
+              : 'rgba(212,169,106,0.15)',
+          }}
+        >
+          {stamped ? (
+            <span className="text-lg">✓</span>
+          ) : (
+            <Image src="/icons/lesser-panda.png" alt="" width={24} height={24} style={{ opacity: 0.5 }} />
           )}
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          {STAMPS.map((stamp) => {
-            const isVisited = visited.has(stamp.id)
-            const isSecret = stamp.id === 'secret' && !allClear
-            const isNew = justStamped === stamp.id
-
-            return (
-              <button
-                key={stamp.id}
-                onClick={() => !isSecret && handleStamp(stamp.id)}
-                disabled={isSecret}
-                className={cn(
-                  'flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 transition-all duration-200 text-center',
-                  isVisited
-                    ? 'border-[rgba(8,176,163,0.3)] shadow-md'
-                    : 'border-dashed border-[rgba(8,176,163,0.2)] bg-[var(--color-teal-pale)]',
-                  isSecret && 'opacity-40 cursor-not-allowed',
-                  isNew && 'animate-stamp-in'
-                )}
-                style={{ backgroundColor: isVisited ? stamp.color : undefined }}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <p
+              className="text-sm font-extrabold truncate"
+              style={{ color: stamped ? 'var(--color-teal-dark)' : 'var(--color-foreground)' }}
+            >
+              {point.facilityName}
+            </p>
+            {isRare && (
+              <span
+                className="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                style={{ background: 'rgba(139,92,246,0.15)', color: '#7c3aed' }}
               >
-                <div className={cn('w-9 h-9', !isVisited && !isSecret && 'silhouette')}>
-                  <Image src={stamp.icon} alt={stamp.name} width={36} height={36} />
-                </div>
-                <span className={cn(
-                  'text-[10px] font-extrabold leading-tight',
-                  isVisited ? 'text-[var(--color-foreground)]' : 'text-[var(--color-bark)] opacity-50'
-                )}>
-                  {isSecret && !allClear ? '???' : stamp.name}
-                </span>
-                {stamp.rare && (
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold" style={{ background: 'var(--color-primary)', color: 'white' }}>
-                    レア
-                  </span>
-                )}
-                {isVisited && (
-                  <span className="text-[9px] font-bold" style={{ color: 'var(--color-teal-dark)' }}>✓ 訪問済</span>
-                )}
-              </button>
-            )
-          })}
+                レア
+              </span>
+            )}
+            {point.checkinMethod === 'qr_gps' && (
+              <span
+                className="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                style={{ background: 'rgba(91,168,212,0.15)', color: '#1d6e9e' }}
+              >
+                QR
+              </span>
+            )}
+          </div>
+          <p className="text-[10px] mt-0.5" style={{ color: 'var(--color-bark)', opacity: 0.65 }}>
+            {coordsNull ? '座標未確定' : `判定半径${point.radiusMeters}m`}
+          </p>
         </div>
 
-        {allClear && (
-          <div className="glass-book rounded-3xl p-6 text-center mb-6 animate-bounce-in">
-            <div className="flex justify-center mb-3 animate-float">
-              <Image src="/icons/trophy.svg" alt="トロフィー" width={64} height={64} />
-            </div>
-            <h2 className="text-lg font-extrabold text-[var(--color-teal-dark)] mb-2">
-              特別衣装解放！
-            </h2>
-            <p className="text-sm text-[var(--color-bark)]">
-              全スポット制覇のあなたに、レッサーパンダの特別衣装イラストを公開！
+        {stamped ? (
+          <span className="text-[10px] font-bold flex-shrink-0" style={{ color: 'var(--color-teal-dark)' }}>
+            取得済
+          </span>
+        ) : inRange && !coordsNull ? (
+          <button
+            onClick={() => onCheckin(point)}
+            className="flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-extrabold"
+            style={{ background: 'linear-gradient(135deg, var(--color-teal-light), var(--color-teal))', color: 'white' }}
+          >
+            チェックイン
+          </button>
+        ) : !coordsNull ? (
+          <button
+            onClick={() => onSelectTarget(point.id)}
+            className="flex-shrink-0 px-2.5 py-1.5 rounded-xl text-[10px] font-extrabold transition-all"
+            style={
+              selected
+                ? { background: 'rgba(200,92,46,0.15)', color: 'var(--color-primary)' }
+                : { background: 'rgba(212,169,106,0.18)', color: 'var(--color-bark)' }
+            }
+          >
+            {selected ? '🎯 設定中' : '地図で見る'}
+          </button>
+        ) : (
+          <span className="text-[10px] font-bold flex-shrink-0" style={{ color: 'rgba(100,100,100,0.4)' }}>
+            未確定
+          </span>
+        )}
+      </div>
+
+      {showCompass && (
+        <div className="px-3 pb-3">
+          <CompassGuide
+            userCoords={userCoords!}
+            targetCoords={point.coords!}
+            distanceMeters={distanceMeters!}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function StampsClient() {
+  const [state, setState] = useState<ExplorationState>(loadState)
+  const [discovered, setDiscovered] = useState<{ point: SpawnPoint; pandaId: string | undefined } | null>(null)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+
+  const geo = useGeolocation()
+
+  function handleSelectTarget(id: string) {
+    setSelectedId((prev) => (prev === id ? null : id))
+  }
+
+  const handleCheckin = useCallback((point: SpawnPoint) => {
+    setSelectedId(null)
+    if (!geo.coords) return
+    const result: CheckinResult = attemptCheckin(point, geo.coords, state)
+    if (result.success) {
+      const next = loadExplorationState()
+      setState(next)
+      setDiscovered({ point, pandaId: getPandaIdBySpot(point.id) })
+      setSelectedId(null)
+      setErrorMsg(null)
+    } else {
+      setErrorMsg(result.message)
+      setTimeout(() => setErrorMsg(null), 4000)
+    }
+  }, [geo.coords, state])
+
+  const stampedCount = state.stamps.length
+  const total = SPAWN_POINTS.length
+  const selectedPoint = selectedId ? SPAWN_POINTS.find((p) => p.id === selectedId) : undefined
+
+  return (
+    <div
+      className="min-h-screen relative"
+      style={{ background: 'linear-gradient(180deg, #E0F7F5 0%, #FFFBF5 30%, #FEF6ED 100%)' }}
+    >
+      {discovered && (
+        <DiscoveryOverlay
+          point={discovered.point}
+          pandaId={discovered.pandaId}
+          onClose={() => setDiscovered(null)}
+        />
+      )}
+
+      <div className="max-w-lg mx-auto px-4 pt-8 pb-6">
+        <div
+          className="rounded-3xl overflow-hidden mb-4"
+          style={{ height: 280, border: '1.5px solid rgba(8,176,163,0.2)', boxShadow: '0 4px 20px rgba(8,176,163,0.10)' }}
+        >
+          <StampMap selectedPointId={selectedId ?? undefined} />
+        </div>
+
+        {selectedPoint && (
+          <div
+            className="rounded-2xl px-4 py-2.5 mb-4 flex items-center gap-2"
+            style={{ background: 'rgba(200,80,60,0.07)', border: '1.5px solid rgba(200,80,60,0.2)' }}
+          >
+            <span className="text-sm">🎯</span>
+            <p className="text-xs font-bold flex-1 truncate" style={{ color: 'var(--color-primary-dark)' }}>
+              目的地：{selectedPoint.facilityName}
             </p>
-            <div className="mt-4 flex justify-center gap-2">
-              <Image src="/icons/lesser-panda.png" alt="" width={56} height={56} />
-              <Image src="/icons/star.svg" alt="" width={28} height={28} className="self-start mt-1" />
-            </div>
+            <button
+              onClick={() => setSelectedId(null)}
+              className="text-[10px] font-bold px-2 py-1 rounded-lg"
+              style={{ background: 'rgba(200,80,60,0.12)', color: 'var(--color-primary)' }}
+            >
+              解除
+            </button>
           </div>
         )}
 
-        <div className="glass-book rounded-3xl p-5 mb-6">
-          <h2 className="font-extrabold text-[var(--color-foreground)] mb-3 flex items-center gap-2">
-              <Image src="/icons/paw.svg" alt="" width={16} height={16} />スタンプについて
-            </h2>
-          <ul className="space-y-2 text-xs text-[var(--color-bark)] opacity-70">
-            <li>・各スポットのカードをタップするとスタンプが押されます</li>
-            <li>・<span className="text-[var(--color-warning)] font-bold">レア</span>スタンプは特別なスポットや季節限定です</li>
-            <li>・全スタンプ制覇で特別なご褒美が解放されます</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  )
-}
+        <header className="flex items-center gap-3 mb-5">
+          <Image src="/icons/trophy.svg" alt="" width={34} height={34} />
+          <div>
+            <h1 className="text-2xl font-extrabold text-[var(--color-foreground)]">スタンプ帳</h1>
+            <p className="text-xs font-bold mt-0.5" style={{ color: 'var(--color-teal-dark)' }}>
+              現地を訪れてスタンプを集めよう
+            </p>
+          </div>
+        </header>
 
-function BookBackground() {
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-      <svg className="absolute top-0 left-0 w-full" viewBox="0 0 400 100" preserveAspectRatio="none">
-        <path d="M0,60 Q50,30 100,50 Q150,70 200,40 Q250,10 300,45 Q350,80 400,55 L400,0 L0,0 Z"
-          fill="#08b0a3" opacity="0.08" />
-      </svg>
-    </div>
-  )
-}
-
-function Confetti() {
-  const items = Array.from({ length: 18 }, (_, i) => ({
-    emoji: ['🎊', '⭐', '✨', '🌟', '🎉'][i % 5],
-    left: `${(i * 7) % 100}%`,
-    delay: `${(i * 0.08).toFixed(2)}s`,
-    duration: `${1.2 + (i % 4) * 0.2}s`,
-  }))
-
-  return (
-    <div className="fixed inset-0 z-50 pointer-events-none overflow-hidden" aria-hidden="true">
-      {items.map((item, i) => (
         <div
-          key={i}
-          className="absolute top-0 text-2xl"
+          className="rounded-3xl p-4 mb-4"
           style={{
-            left: item.left,
-            animation: `confetti ${item.duration} ease-in ${item.delay} forwards`,
+            background: 'rgba(255,255,255,0.7)',
+            border: '1.5px solid rgba(8,176,163,0.2)',
+            backdropFilter: 'blur(8px)',
           }}
         >
-          {item.emoji}
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-extrabold text-[var(--color-foreground)]">達成率</span>
+            <span className="text-sm font-extrabold" style={{ color: 'var(--color-teal-dark)' }}>
+              {stampedCount} / {total}
+            </span>
+          </div>
+          <div className="w-full h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(8,176,163,0.12)' }}>
+            <div
+              className="h-full rounded-full transition-all duration-700"
+              style={{
+                width: `${(stampedCount / total) * 100}%`,
+                background: 'linear-gradient(90deg, var(--color-teal-light), var(--color-teal))',
+              }}
+            />
+          </div>
         </div>
-      ))}
+
+        <div
+          className="rounded-2xl px-4 py-2.5 mb-4 flex items-center gap-2"
+          style={{
+            background: geo.status === 'watching'
+              ? 'rgba(8,176,163,0.08)'
+              : geo.status === 'requesting'
+              ? 'rgba(212,169,106,0.12)'
+              : 'rgba(200,80,80,0.08)',
+            border: `1.5px solid ${
+              geo.status === 'watching'
+                ? 'rgba(8,176,163,0.25)'
+                : geo.status === 'requesting'
+                ? 'rgba(212,169,106,0.3)'
+                : 'rgba(200,80,80,0.2)'
+            }`,
+          }}
+        >
+          <span className="text-base">
+            {geo.status === 'watching' ? '📍' : geo.status === 'requesting' ? '⏳' : '⚠️'}
+          </span>
+          <p className="text-xs font-bold" style={{ color: 'var(--color-foreground)', opacity: 0.75 }}>
+            {geo.status === 'watching' && geo.coords
+              ? `現在地を取得中（精度±${Math.round(geo.accuracy ?? 0)}m）`
+              : geo.status === 'requesting'
+              ? '位置情報を取得しています…'
+              : geo.status === 'denied'
+              ? '位置情報の使用を許可してください'
+              : geo.status === 'unavailable'
+              ? '現在地を取得できませんでした'
+              : '位置情報を準備中'}
+          </p>
+        </div>
+
+        {errorMsg && (
+          <div
+            className="rounded-2xl px-4 py-3 mb-4 text-xs font-bold"
+            style={{
+              background: 'rgba(200,80,80,0.08)',
+              border: '1.5px solid rgba(200,80,80,0.2)',
+              color: '#c85c2e',
+            }}
+          >
+            {errorMsg}
+          </div>
+        )}
+
+        <div className="space-y-2">
+          {SPAWN_POINTS.map((point) => {
+            const stamped = hasStamped(state, point.id)
+            const distanceMeters =
+              geo.coords && point.coords
+                ? calcDistanceMeters(geo.coords, point.coords)
+                : null
+            return (
+              <SpotRow
+                key={point.id}
+                point={point}
+                stamped={stamped}
+                selected={selectedId === point.id}
+                userCoords={geo.coords}
+                distanceMeters={distanceMeters}
+                onCheckin={handleCheckin}
+                onSelectTarget={handleSelectTarget}
+              />
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }

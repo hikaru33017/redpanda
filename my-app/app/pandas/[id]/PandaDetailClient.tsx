@@ -7,6 +7,7 @@ import type { LesserPanda, KeeperDiary, PandaBlog } from '@/lib/types'
 import { useFavorites } from '@/lib/useFavorites'
 import { useComments } from '@/lib/useComments'
 import { cn } from '@/lib/utils'
+import { OpenDataCredit } from '@/components/OpenDataCredit'
 
 interface Props {
   panda: LesserPanda
@@ -69,6 +70,11 @@ export function PandaDetailClient({ panda, parents, pandaChildren, partner, diar
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <span className="text-[120px] leading-none">🐼</span>
+              </div>
+            )}
+            {panda.photoUrl && (
+              <div className="absolute bottom-1 right-2">
+                <OpenDataCredit />
               </div>
             )}
           </div>

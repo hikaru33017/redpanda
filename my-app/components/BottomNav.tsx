@@ -8,9 +8,9 @@ import { cn } from '@/lib/utils'
 const NAV_ITEMS = [
   { href: '/', label: 'ホーム', icon: '/icons/lesser-panda.png' },
   { href: '/plan', icon: '/icons/calendar.svg', label: 'プラン' },
-  { href: '/pandas', label: 'パンダ', icon: '/icons/paw.svg' },
   { href: '/stamps', label: 'スタンプ', icon: '/icons/trophy.svg' },
-  { href: '/pandas/family-tree', label: '家系図', icon: '/icons/heart.svg' },
+  { href: '/collection', label: '図鑑', icon: '/icons/paw.svg' },
+  { href: '/pandas', label: 'パンダ', icon: '/icons/heart.svg' },
 ]
 
 export function BottomNav() {

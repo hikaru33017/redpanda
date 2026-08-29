@@ -1,12 +1,12 @@
 'use client'
 
-import Image from 'next/image'
+import { Mascot } from '@/components/Mascot'
 
 export default function Error({ reset }: { error: Error; reset: () => void }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6 px-6 text-center" style={{ background: 'linear-gradient(180deg, #FEF6E4 0%, #FFFBF5 100%)' }}>
       <div className="animate-wiggle">
-        <Image src="/icons/lesser-panda.png" alt="レッサーパンダ" width={88} height={88} />
+        <Mascot mood="worried" size={88} animate={false} />
       </div>
       <div className="speech-bubble px-6 py-4 max-w-xs">
         <p className="font-extrabold text-[var(--color-primary)] text-lg">うーん、なんか</p>

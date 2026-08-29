@@ -76,3 +76,56 @@ export interface FamilyTreeNode {
   panda: LesserPanda
   children: FamilyTreeNode[]
 }
+
+export type CheckinMethod = 'gps' | 'qr_gps' | 'staff'
+
+export type SpotRarity = 'common' | 'rare'
+
+export type MascotMoodType = 'welcome' | 'guide' | 'happy' | 'worried' | 'excited'
+
+export interface LatLng {
+  lat: number
+  lng: number
+}
+
+export interface SpawnPoint {
+  id: string
+  facilityName: string
+  coords: LatLng | null
+  radiusMeters: number
+  checkinMethod: CheckinMethod
+  mascotMood: MascotMoodType
+  rarity: SpotRarity
+  rarityCondition?: RarityCondition
+  linkedPandaId?: string
+  note?: string
+}
+
+export interface RarityCondition {
+  type: 'time_range' | 'date_range' | 'season'
+  startHour?: number
+  endHour?: number
+  startMonth?: number
+  startDay?: number
+  endMonth?: number
+  endDay?: number
+  label: string
+}
+
+export interface SpawnPointGroup {
+  facilityNo: number
+  facilityName: string
+  points: SpawnPoint[]
+}
+
+export interface StampRecord {
+  spawnPointId: string
+  obtainedAt: string
+  method: CheckinMethod
+  variant?: 'normal' | 'rare'
+}
+
+export interface ExplorationState {
+  stamps: StampRecord[]
+  discoveredPandaIds: string[]
+}
