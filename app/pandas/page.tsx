@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { LESSER_PANDAS } from '@/lib/pandaData'
 import { PandasClient } from './PandasClient'
+import { OpenDataCredit } from '@/components/OpenDataCredit'
 
 export const metadata = {
   title: 'レッサーパンダ | 西山公園ガイド',
@@ -35,6 +36,7 @@ export default function PandasPage() {
 
       <div className="max-w-lg mx-auto px-4 py-6">
         <PandasClient pandas={LESSER_PANDAS} />
+        <OpenDataCredit className="mt-4 text-center" />
       </div>
     </div>
   )

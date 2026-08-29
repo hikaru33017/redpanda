@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { LESSER_PANDAS } from '@/lib/pandaData'
 import type { LesserPanda } from '@/lib/types'
+import { OpenDataCredit } from '@/components/OpenDataCredit'
 
 export const metadata = {
   title: 'レッサーパンダ家系図 | 西山公園ガイド',
@@ -157,6 +158,9 @@ export default function FamilyTreePage() {
             ))}
           </div>
         </div>
+      </div>
+      <div className="max-w-2xl mx-auto px-4 pb-6">
+        <OpenDataCredit className="text-center" />
       </div>
     </div>
   )

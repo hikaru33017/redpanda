@@ -14,7 +14,7 @@ const INTEREST_OPTIONS: { value: InterestCategory; label: string; emoji: string 
 ]
 
 const DURATION_OPTIONS = [1, 2, 3, 4, 5, 6]
-const GROUP_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const GROUP_OPTIONS = [1, 2, 3, 4, 5, 6, 7]
 
 const CATEGORY_COLORS: Record<string, string> = {
   nature: 'bg-green-100 text-green-700',

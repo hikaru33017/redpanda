@@ -1,10 +1,10 @@
-import Image from 'next/image'
+import { Mascot } from '@/components/Mascot'
 
 export default function Loading() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6" style={{ background: 'linear-gradient(180deg, #E0F7F5 0%, #FFFBF5 100%)' }}>
       <div className="animate-walk">
-        <Image src="/icons/lesser-panda.png" alt="レッサーパンダ" width={80} height={80} />
+        <Mascot mood="excited" size={80} animate={false} />
       </div>
       <div className="text-center">
         <p className="text-[var(--color-foreground)] font-extrabold text-lg">レッサーパンダが</p>
