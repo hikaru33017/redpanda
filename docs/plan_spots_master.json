@@ -1,0 +1,105 @@
+[
+  {
+    "id": "nishiyama-zoo",
+    "name": "西山動物園",
+    "category": ["レッサーパンダの癒し", "子供と遊ぶ"],
+    "description": "レッサーパンダやシロテナガザル、リスザルなどが飼育されている無料の動物園。",
+    "suggestedMinutes": 45,
+    "openingHours": { "open": "09:00", "close": "16:30" },
+    "closedDays": ["monday（祝日の場合は翌日）", "年末年始"],
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "panda-land",
+    "name": "パンダらんど（アスレチックフィールド）",
+    "category": ["子供と遊ぶ"],
+    "description": "14種類の遊び機能をもったアスレチックフィールド。子供が体を動かして遊べる。",
+    "suggestedMinutes": 40,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "kyoyo-teien",
+    "name": "嚮陽庭園",
+    "category": ["歴史を感じる", "花・自然を楽しむ"],
+    "description": "鯖江藩の歴史に関連する庭園。落ち着いた雰囲気で散策できる。",
+    "suggestedMinutes": 30,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "observatory",
+    "name": "展望台",
+    "category": ["花・自然を楽しむ"],
+    "description": "西山の頂上に位置し、鯖江市街を一望できる。",
+    "suggestedMinutes": 15,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "big-fountain",
+    "name": "大噴水",
+    "category": ["花・自然を楽しむ"],
+    "description": "エントランス広場にある大噴水。",
+    "suggestedMinutes": 10,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "love-bell",
+    "name": "愛の鐘",
+    "category": ["パワースポット"],
+    "description": "西山頂上にある鐘。カップルに人気のスポット。",
+    "suggestedMinutes": 10,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "musubi-chime",
+    "name": "結びのチャイム",
+    "category": ["パワースポット"],
+    "description": "カップル向けの縁結びスポット。",
+    "suggestedMinutes": 10,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "inori-no-michi",
+    "name": "祈りの道",
+    "category": ["パワースポット", "歴史を感じる"],
+    "description": "約400基の石像が並ぶ道。厳かな雰囲気を感じられる。",
+    "suggestedMinutes": 20,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "north-garden",
+    "name": "北の庭",
+    "category": ["花・自然を楽しむ"],
+    "description": "初夏には花菖蒲と藤の花が咲く庭。",
+    "suggestedMinutes": 20,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "lawn-plaza",
+    "name": "芝生広場",
+    "category": ["子供と遊ぶ", "花・自然を楽しむ"],
+    "description": "広々とした芝生広場。ピクニックや子供の遊び場に最適。",
+    "suggestedMinutes": 20,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "manabe-hall",
+    "name": "まなべの館",
+    "category": ["歴史を感じる"],
+    "description": "西山公園内の博物館。",
+    "suggestedMinutes": 30,
+    "source": "https://www.city.sabae.fukui.jp/kanko/feature/nishiyama.html"
+  },
+  {
+    "id": "michinoeki-nishiyama",
+    "name": "道の駅西山公園",
+    "category": ["食事・買い物"],
+    "description": "西山公園に隣接する道の駅。地元農家の新鮮な野菜や、眼鏡・漆器・繊維など鯖江のものづくり製品を展示販売するコーナーがある。エレベーターで最上階まで上がり、吊り橋を渡ると西山公園の中腹まで行ける。",
+    "suggestedMinutes": 40,
+    "openingHours": { "open": "09:00", "close": "18:00" },
+    "foodServiceHours": { "open": "10:00", "close": "17:00" },
+    "closedDays": ["12月31日〜1月2日（年末年始）"],
+    "source": "https://fuku-iro.jp/spot/detail_10181.html",
+    "note": "飲食店の詳細情報はページに明記なし。公式サイト（nishiyama-park.jp）または電話（0778-51-8181）で要確認"
+  }
+]
+

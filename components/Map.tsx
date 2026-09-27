@@ -117,25 +117,14 @@ function MapLegend() {
 
 function SpotCounts({ confirmed, pending }: { confirmed: number; pending: number }) {
   return (
-    <div className="flex gap-3">
-      <div
-        className="flex-1 rounded-2xl px-4 py-3 flex items-center gap-3"
-        style={{ background: 'var(--color-teal-pale)', border: '1px solid rgba(8,176,163,0.2)' }}
-      >
-        <span className="text-2xl font-extrabold text-[var(--color-teal-dark)]">{confirmed}</span>
-        <span className="text-xs font-bold text-[var(--color-teal-dark)] leading-tight">
-          地図に<br />表示中
-        </span>
-      </div>
-      <div
-        className="flex-1 rounded-2xl px-4 py-3 flex items-center gap-3"
-        style={{ background: 'var(--color-sand-pale)', border: '1px solid rgba(212,169,106,0.25)' }}
-      >
-        <span className="text-2xl font-extrabold text-[var(--color-bark)]">{pending}</span>
-        <span className="text-xs font-bold text-[var(--color-bark)] leading-tight">
-          座標<br />未確定
-        </span>
-      </div>
+    <div
+      className="rounded-2xl px-4 py-3 flex items-center gap-3"
+      style={{ background: 'var(--color-teal-pale)', border: '1px solid rgba(8,176,163,0.2)' }}
+    >
+      <span className="text-2xl font-extrabold text-[var(--color-teal-dark)]">{confirmed}</span>
+      <span className="text-xs font-bold text-[var(--color-teal-dark)] leading-tight">
+        地図に<br />表示中
+      </span>
     </div>
   )
 }

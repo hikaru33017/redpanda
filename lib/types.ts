@@ -9,6 +9,7 @@ export interface TourPlanInput {
   duration: number
   groupSize: number
   interests: InterestCategory[]
+  startHour?: number // 開始時刻（時）
 }
 
 export interface TourActivity {
@@ -42,6 +43,10 @@ export interface LesserPanda {
   partnerId?: string
   bio: string
   favoriteCount: number
+  status?: 'active' | 'transferred' | 'deceased'
+  deceasedDate?: string
+  transferDate?: string
+  transferDestination?: string
 }
 
 export interface KeeperDiary {
@@ -128,4 +133,21 @@ export interface StampRecord {
 export interface ExplorationState {
   stamps: StampRecord[]
   discoveredPandaIds: string[]
+}
+
+export interface AncestorPanda {
+  id: string
+  name: string
+  nameEn?: string
+  gender: 'male' | 'female'
+  birthDate: string
+  deceasedDate?: string
+  transferDate?: string
+  transferDestination?: string
+  birthPlace?: string
+  photoUrl?: string
+  parentIds: string[]
+  partnerIds: string[]
+  childrenIds: string[]
+  isNishiyamaResident: boolean  // true: 西山で飼育された, false: 血縁関係のみで登場
 }

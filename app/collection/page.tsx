@@ -1,8 +1,8 @@
 import { CollectionClient } from './CollectionClient'
 
 export const metadata = {
-  title: '図鑑 | 西山公園ガイド',
-  description: '西山公園のスポットで出会ったレッサーパンダたちの図鑑です。',
+  title: 'コレクション | 西山公園ガイド',
+  description: '西山公園のスポットで出会ったレッサーパンダたちのコレクションです。',
 }
 
 export default function CollectionPage() {

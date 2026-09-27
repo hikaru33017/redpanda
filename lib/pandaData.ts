@@ -1,5 +1,13 @@
 import type { LesserPanda, KeeperDiary, PandaBlog } from './types'
 
+/**
+ * 西山動物園の現在の個体データ（13頭）
+ *
+ * 参考: 2026-09-10更新の別データセット（sabaeredpanda.csv, resource: 83eb4a7c-f0df-48d9-8a79-a081edb772d7）では、
+ * ミンファ・ティアラが西山在籍として記載されているが、備考欄の矛盾（ニーコ・レイファ・かえでが言及されるが
+ * リストに含まれていない）および緯度経度が全頭同一である点から、信頼性に疑問があるため採用を見送った。
+ * 本データは飼育個体情報ファイル（redpanda_shiikukotai.xlsx）および過去の確認情報に基づく。
+ */
 export const LESSER_PANDAS: LesserPanda[] = [
   {
     id: 'minfa',
@@ -16,6 +24,8 @@ export const LESSER_PANDAS: LesserPanda[] = [
     childrenIds: ['tiara'],
     bio: 'ティアラのお母さん。市川市動植物園から来園した、西山動物園最年長のレッサーパンダ。',
     favoriteCount: 0,
+    status: 'deceased',
+    deceasedDate: '2026-05-21',
   },
   {
     id: 'kirari',
@@ -32,6 +42,8 @@ export const LESSER_PANDAS: LesserPanda[] = [
     childrenIds: ['light', 'mocchi'],
     bio: '姫路セントラルパークから来園。ライトとモッチーのお母さん。',
     favoriteCount: 0,
+    status: 'deceased',
+    deceasedDate: '2025-07-06',
   },
   {
     id: 'taiyo',
@@ -60,7 +72,7 @@ export const LESSER_PANDAS: LesserPanda[] = [
     favoriteFood: 'リンゴ・ぶどう',
     hobby: 'ボール遊び・高い所に登ること',
     photoUrl: '/pandas/light.jpg',
-    parentIds: ['kirari'],
+    parentIds: [],
     childrenIds: ['kaede'],
     partnerId: 'kanoko',
     bio: 'キラリの息子として西山動物園で生まれた。かのこと夫婦でかえでの父。',
@@ -78,7 +90,7 @@ export const LESSER_PANDAS: LesserPanda[] = [
     hobby: '昼寝・毛づくろい',
     photoUrl: '/pandas/matsuba.jpg',
     parentIds: [],
-    childrenIds: ['niko', 'reifa'],
+    childrenIds: ['niko'],
     partnerId: 'mocchi',
     bio: '静岡市立日本平動物園から来園。モッチーと夫婦で、双子のニーコとレイファのお母さん。',
     favoriteCount: 0,
@@ -94,8 +106,8 @@ export const LESSER_PANDAS: LesserPanda[] = [
     favoriteFood: 'リンゴ・ぶどう',
     hobby: '探索・遊び',
     photoUrl: '/pandas/mocchi.jpg',
-    parentIds: ['kirari'],
-    childrenIds: ['niko', 'reifa'],
+    parentIds: [],
+    childrenIds: ['niko'],
     partnerId: 'matsuba',
     bio: 'キラリの息子として西山動物園で生まれた。まつばと夫婦で、双子のニーコとレイファのお父さん。',
     favoriteCount: 0,
@@ -113,8 +125,10 @@ export const LESSER_PANDAS: LesserPanda[] = [
     photoUrl: '/pandas/tiara.jpg',
     parentIds: ['minfa'],
     childrenIds: [],
-    bio: 'ミンファの娘。神戸市立王子動物園から来園した気品あるパンダ。',
+    partnerId: 'mutan',
+    bio: 'ミンファの娘。神戸市立王子動物園から来園し、現在西山動物園で飼育中。気品あるパンダ。',
     favoriteCount: 0,
+    status: 'active',
   },
   {
     id: 'kanoko',
@@ -146,7 +160,8 @@ export const LESSER_PANDAS: LesserPanda[] = [
     photoUrl: '/pandas/kanta.png',
     parentIds: [],
     childrenIds: [],
-    bio: '秋田市大森山動物園から来園したオスのパンダ。慎重な性格だがとても可愛い。',
+    partnerId: 'akebi',
+    bio: '秋田市大森山動物園から来園したオスのパンダ。慎重な性格だがとても可愛い。アケビのパートナー。',
     favoriteCount: 0,
   },
   {
@@ -164,6 +179,9 @@ export const LESSER_PANDAS: LesserPanda[] = [
     childrenIds: [],
     bio: 'モッチーとまつばの娘。レイファとは双子で、西山動物園生まれのかわいい姉妹。',
     favoriteCount: 0,
+    status: 'transferred',
+    transferDate: '2025-06-20',
+    transferDestination: '浜松市動物園',
   },
   {
     id: 'reifa',
@@ -180,6 +198,9 @@ export const LESSER_PANDAS: LesserPanda[] = [
     childrenIds: [],
     bio: 'モッチーとまつばの娘。ニーコとは双子で、元気いっぱいの西山動物園生まれ。',
     favoriteCount: 0,
+    status: 'transferred',
+    transferDate: '2025-04-14',
+    transferDestination: '秋田市大森山動物園',
   },
   {
     id: 'kaede',
@@ -195,6 +216,26 @@ export const LESSER_PANDAS: LesserPanda[] = [
     parentIds: ['light', 'kanoko'],
     childrenIds: [],
     bio: 'ライトとかのこの娘。2022年生まれの西山動物園の最年少。ふわふわの毛がとびきりかわいい。',
+    favoriteCount: 0,
+    status: 'transferred',
+    transferDate: '2025-03-03',
+    transferDestination: 'いしかわ動物園',
+  },
+  {
+    id: 'akebi',
+    name: 'アケビ',
+    nameEn: 'Akebi',
+    gender: 'female',
+    birthDate: '2020-06-29',
+    birthPlace: '八木山動物公園フジサキの杜',
+    personality: '物怖じしない',
+    favoriteFood: 'リンゴ・バンブーシュート',
+    hobby: '探索・木登り',
+    photoUrl: '/pandas/akebi.jpg',
+    parentIds: [],
+    childrenIds: [],
+    partnerId: 'kanta',
+    bio: '八木山動物公園から来園。赤茶の美しい毛並み、はっきりした顔立ち、潤んだ瞳が特徴。かんたのパートナー。',
     favoriteCount: 0,
   },
 ]

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { MapContainer, TileLayer, Circle, Popup, Polyline, Marker, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, Circle, Popup, Polyline, Marker, useMap, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { SpawnPoint, LatLng } from '@/lib/types'
@@ -29,6 +29,16 @@ const BOUNCE_CSS = `
   animation: map-pin-bounce 0.9s ease-in-out infinite;
   transform-origin: bottom center;
 }
+@keyframes panda-walk {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%      { transform: translateY(-3px) rotate(-2deg); }
+  50%      { transform: translateY(-5px) rotate(0deg); }
+  75%      { transform: translateY(-3px) rotate(2deg); }
+}
+.panda-walk {
+  animation: panda-walk 1.2s ease-in-out infinite;
+  transform-origin: center;
+}
 `
 
 function InjectBounceCSS() {
@@ -47,10 +57,20 @@ function InjectBounceCSS() {
 function makeMascotIcon(size = 36): L.DivIcon {
   return L.divIcon({
     className: '',
-    html: `<img src="/mascot/mood_guide.png"
-      width="${size}" height="${size}"
-      style="border-radius:50%;border:2.5px solid #5BA8D4;box-shadow:0 2px 8px rgba(91,168,212,0.5);background:white;object-fit:contain;"
-      alt="現在地" />`,
+    html: `<div style="animation: pandaWalk 1.2s ease-in-out infinite;">
+      <img src="/mascot/mood_guide.png"
+        width="${size}" height="${size}"
+        style="object-fit:contain;"
+        alt="現在地" />
+      <style>
+        @keyframes pandaWalk {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          25%      { transform: translateY(-3px) rotate(-2deg); }
+          50%      { transform: translateY(-5px) rotate(0deg); }
+          75%      { transform: translateY(-3px) rotate(2deg); }
+        }
+      </style>
+    </div>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
   })
@@ -200,8 +220,11 @@ export function MapInner({ points, userCoords, userAccuracy, recenterOnUser, sel
       zoom={16}
       style={{ width: '100%', height: '100%' }}
       scrollWheelZoom={false}
+      zoomControl={false}
     >
       <InjectBounceCSS />
+
+      <ZoomControl position="bottomleft" />
 
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

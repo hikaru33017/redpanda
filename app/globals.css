@@ -310,6 +310,14 @@ body {
   33% { transform: translateY(-10px) rotate(1deg); }
   66% { transform: translateY(-5px) rotate(-1deg); }
 }
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
 @keyframes wiggle {
   0%, 100% { transform: rotate(-4deg); }
   50% { transform: rotate(4deg); }
@@ -353,6 +361,8 @@ body {
 .animate-slide-in-right { animation: slideInRight 0.45s ease forwards; }
 .animate-bounce-in { animation: bounceIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
 .animate-float { animation: float 3.5s ease-in-out infinite; }
+.animate-float-slow { animation: floatSlow 2.5s ease-in-out infinite; }
+.animate-breathe { animation: breathe 3s ease-in-out infinite; }
 .animate-wiggle { animation: wiggle 1.8s ease-in-out infinite; }
 .animate-walk { animation: walk 2s ease-in-out infinite; }
 .animate-stamp-in { animation: stampIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }

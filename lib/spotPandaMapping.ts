@@ -4,20 +4,20 @@ export type SpotPandaEntry = {
 }
 
 export const SPOT_PANDA_MAPPING: SpotPandaEntry[] = [
-  { spawnPointId: 'zoo-entrance',      pandaId: 'kirari'   },
+  { spawnPointId: 'zoo-entrance',      pandaId: 'akebi'    },
   { spawnPointId: 'zoo-panda-house',   pandaId: 'light'    },
   { spawnPointId: 'roadside-station',  pandaId: 'kanoko'   },
-  { spawnPointId: 'lawn-plaza-a',      pandaId: 'kaede'    },
-  { spawnPointId: 'lawn-plaza-b',      pandaId: 'reifa'    },
+  { spawnPointId: 'lawn-plaza-a',      pandaId: 'kanta'    },
+  { spawnPointId: 'lawn-plaza-b',      pandaId: 'tiara'    },
   { spawnPointId: 'musubi-hiroba',     pandaId: 'mocchi'   },
-  { spawnPointId: 'fountain',          pandaId: 'minfa'    },
+  { spawnPointId: 'fountain',          pandaId: 'matsuba'  },
   { spawnPointId: 'nishiyama-bridge',  pandaId: 'taiyo'    },
   { spawnPointId: 'upper-garden',      pandaId: 'matsuba'  },
   { spawnPointId: 'north-garden',      pandaId: 'kanta'    },
-  { spawnPointId: 'panda-land-a',      pandaId: 'niko'     },
+  { spawnPointId: 'panda-land-a',      pandaId: 'tiara'    },
   { spawnPointId: 'panda-land-b',      pandaId: 'mocchi'   },
-  { spawnPointId: 'love-bell',         pandaId: 'tiara'    },
-  { spawnPointId: 'shodo-an',          pandaId: 'matsuba'  },
+  { spawnPointId: 'love-bell',         pandaId: 'akebi'    },
+  { spawnPointId: 'shodo-an',          pandaId: 'light'    },
 ]
 
 export function getPandaIdBySpot(spawnPointId: string): string | undefined {

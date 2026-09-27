@@ -80,12 +80,11 @@ export const SPAWN_POINTS: SpawnPoint[] = [
   {
     id: 'nishiyama-bridge',
     facilityName: '西山橋',
-    coords: null,
+    coords: { lat: 35.951249, lng: 136.183228 },
     radiusMeters: 40,
     checkinMethod: 'qr_gps',
     mascotMood: 'guide',
     rarity: 'common',
-    note: '座標未確定。鯖江市公園緑地課へ問い合わせ予定（0778-53-2239）',
   },
   {
     id: 'upper-garden',
@@ -139,12 +138,11 @@ export const SPAWN_POINTS: SpawnPoint[] = [
   {
     id: 'shodo-an',
     facilityName: '茶呈「松堂庵」',
-    coords: null,
+    coords: { lat: 35.950781, lng: 136.184119 },
     radiusMeters: 40,
     checkinMethod: 'qr_gps',
     mascotMood: 'welcome',
     rarity: 'common',
-    note: '座標未確定。鯖江市公園緑地課へ問い合わせ予定（0778-53-2239）',
   },
 ]
 

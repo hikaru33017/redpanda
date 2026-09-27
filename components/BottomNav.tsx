@@ -6,11 +6,11 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
-  { href: '/', label: 'ホーム', icon: '/icons/lesser-panda.png' },
-  { href: '/plan', icon: '/icons/calendar.svg', label: 'プラン' },
-  { href: '/stamps', label: 'スタンプ', icon: '/icons/trophy.svg' },
-  { href: '/collection', label: '図鑑', icon: '/icons/paw.svg' },
-  { href: '/pandas', label: 'パンダ', icon: '/icons/heart.svg' },
+  { href: '/', label: 'ホーム', icon: '/icons/panda-face-laugh.png' },
+  { href: '/plan', icon: '/icons/panda-face-smile.png', label: '観光プラン' },
+  { href: '/stamps', label: 'スタンプ', icon: '/icons/panda-face-wink.png' },
+  { href: '/collection', label: 'コレクション', icon: '/icons/panda-face-surprised.png' },
+  { href: '/pandas', label: 'レッサーパンダ', icon: '/icons/panda-face-peek-paws.png' },
 ]
 
 export function BottomNav() {

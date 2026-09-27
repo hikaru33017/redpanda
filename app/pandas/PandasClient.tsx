@@ -13,9 +13,11 @@ interface Props {
 export function PandasClient({ pandas }: Props) {
   const { favorites, toggleFavorite } = useFavorites()
 
+  const activePandas = pandas.filter((p) => p.status !== 'transferred' && p.status !== 'deceased')
+
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      {pandas.map((panda) => (
+      {activePandas.map((panda) => (
         <div
           key={panda.id}
           className="card-soft flex flex-col overflow-hidden rounded-3xl"
