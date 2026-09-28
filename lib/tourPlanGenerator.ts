@@ -13,7 +13,7 @@ type SpotData = {
 const spots = planSpotsData as SpotData[]
 
 // カテゴリマッピング
-const categoryMap: Record<string, InterestCategory> = {
+const categoryMap: Record<string, InterestCategory | 'meal'> = {
   '花・自然を楽しむ': 'nature',
   '子供と遊ぶ': 'family',
   'パワースポット': 'power_spot',
@@ -23,7 +23,7 @@ const categoryMap: Record<string, InterestCategory> = {
 }
 
 // スポットデータをTourActivityに変換する関数
-function spotToActivity(spot: SpotData, category: InterestCategory): TourActivity {
+function spotToActivity(spot: SpotData, category: InterestCategory | 'meal'): TourActivity {
   return {
     time: '',
     title: spot.name,
