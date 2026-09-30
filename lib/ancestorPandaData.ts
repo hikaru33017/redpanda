@@ -824,19 +824,6 @@ export const ANCESTOR_PANDAS: AncestorPanda[] = [
     isNishiyamaResident: true,
   },
   {
-    id: 'minfa',
-    name: 'ミンファ',
-    gender: 'female',
-    birthDate: '2006-06-23',
-    transferDate: '2014-03-10',
-    transferDestination: '神戸市立王子動物園',
-    birthPlace: '市川市動植物園',
-    parentIds: ["koukou", "meimei"],  // 第5世代として設定（2006年生まれ、コウコウ・メイメイの子供と推定）
-    partnerIds: ["chata"],
-    childrenIds: ["fafa", "minmin", "charmin", "sousou", "milky", "tiara"],
-    isNishiyamaResident: true,
-  },
-  {
     id: 'rairai',
     name: '来来（ライライ）',
     gender: 'female',
@@ -1058,19 +1045,6 @@ export const ANCESTOR_PANDAS: AncestorPanda[] = [
     birthPlace: '八木山動物公園フジサキの杜',
     parentIds: ["homare", "karin"],  // 第6世代と推定（2020年生まれ）
     partnerIds: ["kanta"],
-    childrenIds: [],
-    isNishiyamaResident: true,
-  },
-  {
-    id: 'reifa',
-    name: '令花（レイファ）',
-    gender: 'female',
-    birthDate: '2019-07-12',
-    birthPlace: '鯖江市西山動物園',
-    transferDate: '2025-04-14',
-    transferDestination: '秋田市大森山動物園',
-    parentIds: ["mocchi", "matsuba"],  // モッチーとまつばの娘（双子）
-    partnerIds: [],
     childrenIds: [],
     isNishiyamaResident: true,
   },

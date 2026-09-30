@@ -175,7 +175,9 @@ export function PandaDetailClient({ panda, parents, pandaChildren, partner }: Pr
                     {partner && (
                       <div>
                         <p className="text-xs text-[var(--color-bark)] mb-1.5">パートナー</p>
-                        <PandaChip panda={partner} />
+                        <div className="flex gap-2 flex-wrap">
+                          <PandaChip panda={partner} />
+                        </div>
                       </div>
                     )}
                     {pandaChildren.length > 0 && (
