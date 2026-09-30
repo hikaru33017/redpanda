@@ -9,12 +9,6 @@ import { IllustMap } from '@/components/IllustMap'
 
 const STORAGE_KEY = 'home-view-mode'
 
-const SPOTS = [
-  { icon: '/icons/lesser-panda.png', name: '西山動物園', desc: 'レッサーパンダに無料で会える', color: 'var(--color-primary-pale)', borderColor: 'rgba(200,92,46,0.2)' },
-  { icon: '/icons/cherry-blossom.svg', name: '嚮陽庭園', desc: '四季折々の花が楽しめる日本庭園', color: 'var(--color-teal-pale)', borderColor: 'rgba(8,176,163,0.2)' },
-  { icon: '/icons/bamboo.svg', name: 'パンダらんど', desc: '14種類の遊具がある冒険の森', color: 'var(--color-forest-pale)', borderColor: 'rgba(90,154,74,0.2)' },
-]
-
 // ツツジ画像（鯖江市オープンデータ CC-BY 2.1 JP）
 const TSUTSUJI_IMAGE = 'https://ckan.odp.jig.jp/dataset/5485cc00-e0ff-4d75-b620-9402ed08a823/resource/2f205454-50ec-4f2c-8b72-a8b893cca4d1/download/2.jpg'
 
@@ -50,8 +44,8 @@ export function HomeClient({ seasonalRec, featuredPanda, pandas }: Props) {
               <p className="text-xs font-bold mb-0.5 text-[var(--color-teal-dark)]">福井県鯖江市</p>
               <h1 className="text-2xl font-extrabold text-[var(--color-foreground)]">西山公園ガイド</h1>
             </div>
-            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[rgba(8,176,163,0.2)] bg-[var(--color-teal-pale)] flex items-center justify-center">
-              <Image src="/icons/panda-icon.png" alt="レッサーパンダ" width={32} height={32} style={{ objectFit: 'contain' }} />
+            <div className="w-24 h-24 flex items-center justify-center">
+              <Image src="/illustrations/panda-peek-log.png" alt="レッサーパンダ" width={96} height={96} style={{ objectFit: 'contain' }} />
             </div>
           </header>
         )}
@@ -174,39 +168,58 @@ export function HomeClient({ seasonalRec, featuredPanda, pandas }: Props) {
               </div>
             </div>
 
-            {/* ── おすすめスポット ── */}
+            {/* ── イラストマップ導線バナー ── */}
             <section className="mb-5">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-sm font-extrabold text-[var(--color-foreground)] flex items-center gap-1.5">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-teal)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
-                    <line x1="9" y1="3" x2="9" y2="18" /><line x1="15" y1="6" x2="15" y2="21" />
-                  </svg>
-                  おすすめスポット
-                </h2>
-                <Link href="/plan" className="text-xs font-bold text-[var(--color-teal-dark)] flex items-center gap-0.5">
-                  プランを作る
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-                </Link>
-              </div>
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-                {SPOTS.map((spot) => (
-                  <Link key={spot.name} href="/plan" className="flex-shrink-0 w-36">
-                    <div
-                      className="rounded-2xl p-4 h-36 flex flex-col justify-between card-soft"
-                      style={{ backgroundColor: spot.color, border: `1.5px solid ${spot.borderColor}` }}
-                    >
-                      <div className="w-10 h-10">
-                        <Image src={spot.icon} alt={spot.name} width={40} height={40} style={{ objectFit: 'contain' }} />
-                      </div>
-                      <div>
-                        <p className="font-extrabold text-xs text-[var(--color-foreground)]">{spot.name}</p>
-                        <p className="text-[11px] text-[var(--color-bark)] mt-0.5 leading-tight">{spot.desc}</p>
-                      </div>
+              <button
+                onClick={() => switchMode('map')}
+                className="w-full text-left focus:outline-none"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
+              >
+                <div
+                  className="relative rounded-2xl overflow-hidden"
+                  style={{
+                    border: '1.5px solid rgba(200,92,46,0.2)',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                    height: 110,
+                  }}
+                >
+                  {/* 背景：イラストマップ画像をトリミング */}
+                  <Image
+                    src="/images/nishiyama-park-illustration.png"
+                    alt=""
+                    fill
+                    style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
+                    unoptimized
+                  />
+                  {/* 暗めオーバーレイ */}
+                  <div
+                    className="absolute inset-0"
+                    style={{ background: 'linear-gradient(120deg, rgba(30,15,5,0.62) 0%, rgba(30,15,5,0.38) 60%, rgba(30,15,5,0.15) 100%)' }}
+                  />
+                  {/* コンテンツ */}
+                  <div className="absolute inset-0 flex items-center px-5 gap-3">
+                    {/* テキスト */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-extrabold text-sm leading-tight drop-shadow">
+                        西山公園をイラストマップで探検しよう
+                      </p>
+                      <p className="text-white text-xs opacity-80 mt-1 drop-shadow">
+                        スポットをタップして詳細を確認できます
+                      </p>
                     </div>
-                  </Link>
-                ))}
-              </div>
+                    {/* レッサーパンダイラスト（左右反転） */}
+                    <div className="flex-shrink-0 w-14 h-14 flex items-center justify-center">
+                      <Image
+                        src="/illustrations/panda-lying-peek.png"
+                        alt="レッサーパンダ"
+                        width={56}
+                        height={56}
+                        style={{ objectFit: 'contain', transform: 'scaleX(-1)', filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.4))' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </button>
             </section>
 
             {/* ── レッサーパンダ ── */}

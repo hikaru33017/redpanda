@@ -85,10 +85,6 @@ export function PlanClient() {
               </h1>
             </div>
 
-            {/* Right - panda illustration */}
-            <div className="w-8 h-8 flex items-center justify-center">
-              <Image src="/illustrations/panda-peek-log.png" alt="" width={32} height={32} style={{ objectFit: 'contain' }} />
-            </div>
           </div>
         </div>
 

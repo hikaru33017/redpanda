@@ -327,7 +327,7 @@ export function StampsClient() {
         >
           <div className="max-w-lg mx-auto space-y-3">
             <div className="flex items-center gap-3">
-              <Image src="/icons/panda-face-wink.png" alt="" width={40} height={40} />
+              <Image src="/illustrations/panda-eating-apple.png" alt="" width={40} height={40} style={{ objectFit: 'contain' }} />
               <div>
                 <h1 className="text-xl font-extrabold text-[var(--color-foreground)]">スタンプ帳</h1>
                 <p className="text-[10px] font-bold mt-0.5" style={{ color: 'var(--color-teal-dark)' }}>
