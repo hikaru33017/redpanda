@@ -6,6 +6,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LESSER_PANDAS } from '@/lib/pandaData';
 import { ANCESTOR_PANDAS } from '@/lib/ancestorPandaData';
+import { getHistoricalPandasWithId } from '@/lib/historicalPandaData';
 
 export function FamilyTreeViewer() {
   const router = useRouter();
@@ -34,6 +35,14 @@ export function FamilyTreeViewer() {
       map.set(panda.name, panda.id);
       if (panda.nameEn) {
         map.set(panda.nameEn.toLowerCase(), panda.id);
+      }
+    });
+
+    // 歴代パンダ（既存の名前は上書きしない）
+    const historicalPandas = getHistoricalPandasWithId();
+    historicalPandas.forEach(panda => {
+      if (!map.has(panda.name)) {
+        map.set(panda.name, panda.id);
       }
     });
 

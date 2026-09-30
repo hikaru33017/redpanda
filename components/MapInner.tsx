@@ -15,7 +15,6 @@ const RARITY_COLOR: Record<string, string> = {
 
 const CHECKIN_LABEL: Record<string, string> = {
   gps: 'GPS',
-  qr_gps: 'QR＋GPS',
   staff: 'スタッフ確認',
 }
 
@@ -57,10 +56,9 @@ function InjectBounceCSS() {
 function makeMascotIcon(size = 36): L.DivIcon {
   return L.divIcon({
     className: '',
-    html: `<div style="animation: pandaWalk 1.2s ease-in-out infinite;">
+    html: `<div style="width:${size}px;height:${size}px;animation:pandaWalk 1.2s ease-in-out infinite;">
       <img src="/mascot/mood_guide.png"
-        width="${size}" height="${size}"
-        style="object-fit:contain;"
+        style="width:${size}px;height:${size}px;object-fit:contain;display:block;"
         alt="現在地" />
       <style>
         @keyframes pandaWalk {

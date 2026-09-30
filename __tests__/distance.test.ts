@@ -66,7 +66,7 @@ describe('isUserAtSpawnPoint', () => {
     facilityName: '西山橋',
     coords: null,
     radiusMeters: 40,
-    checkinMethod: 'qr_gps',
+    checkinMethod: 'gps',
     mascotMood: 'guide',
     rarity: 'common',
   }
@@ -76,7 +76,7 @@ describe('isUserAtSpawnPoint', () => {
     facilityName: '茶呈「松堂庵」',
     coords: null,
     radiusMeters: 40,
-    checkinMethod: 'qr_gps',
+    checkinMethod: 'gps',
     mascotMood: 'welcome',
     rarity: 'common',
   }

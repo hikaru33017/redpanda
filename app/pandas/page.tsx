@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { LESSER_PANDAS } from '@/lib/pandaData'
+import { getHistoricalPandas } from '@/lib/historicalPandaData'
 import { PandasClient } from './PandasClient'
+import { HistoricalPandasSection } from '@/components/HistoricalPandasSection'
 import { OpenDataCredit } from '@/components/OpenDataCredit'
 
 export const metadata = {
@@ -10,6 +12,8 @@ export const metadata = {
 }
 
 export default function PandasPage() {
+  const historicalPandas = getHistoricalPandas()
+
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #E0F7F5 0%, #FFFBF5 25%, #FEF6ED 100%)' }}>
       <div className="page-header">
@@ -36,6 +40,7 @@ export default function PandasPage() {
 
       <div className="max-w-lg mx-auto px-4 py-6">
         <PandasClient pandas={LESSER_PANDAS} />
+        <HistoricalPandasSection pandas={historicalPandas} />
         <OpenDataCredit className="mt-4 text-center" />
       </div>
     </div>

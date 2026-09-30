@@ -13,7 +13,7 @@ export function FamilyTreeHeader({ nodes, width }: FamilyTreeHeaderProps) {
   const statusCounts = {
     現在飼育: nodes.filter((n) => n.statusLabel === '現在飼育').length,
     移動: nodes.filter((n) => n.statusLabel === '移動').length,
-    死亡: nodes.filter((n) => n.statusLabel === '死亡').length,
+    お空組: nodes.filter((n) => n.statusLabel === 'お空組').length,
   };
 
   const totalCount = nodes.length;
@@ -63,7 +63,7 @@ export function FamilyTreeHeader({ nodes, width }: FamilyTreeHeaderProps) {
         fill="#d0e8d8"
         textAnchor="end"
       >
-        現在飼育{statusCounts.現在飼育} ・ 移動{statusCounts.移動} ・ 死亡{statusCounts.死亡}
+        現在飼育{statusCounts.現在飼育} ・ 移動{statusCounts.移動} ・ お空組{statusCounts.お空組}
       </text>
     </g>
   );
@@ -121,14 +121,14 @@ export function FamilyTreeLegend() {
           移動
         </text>
 
-        {/* 死亡 */}
+        {/* お空組 */}
         <rect
           x="180"
           y="0"
           width="4"
           height="20"
           rx="2"
-          fill={STATUS_COLORS.死亡.bar}
+          fill={STATUS_COLORS.お空組.bar}
         />
         <text
           x="192"
@@ -136,7 +136,7 @@ export function FamilyTreeLegend() {
           fontSize="13"
           fill="#31463d"
         >
-          死亡
+          お空組
         </text>
       </g>
 

@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { LESSER_PANDAS, KEEPER_DIARIES, PANDA_BLOGS } from '../lib/pandaData'
 
 describe('LESSER_PANDAS', () => {
-  it('has 12 pandas from open data', () => {
-    expect(LESSER_PANDAS.length).toBe(12)
+  it('has 13 pandas from open data', () => {
+    expect(LESSER_PANDAS.length).toBe(13)
   })
 
   it('each panda has required fields', () => {

@@ -27,7 +27,6 @@ const pendingPoints = SPAWN_POINTS.filter((p) => p.coords === null)
 
 const CHECKIN_LABEL: Record<string, string> = {
   gps: 'GPS',
-  qr_gps: 'QR＋GPS',
   staff: 'スタッフ確認',
 }
 

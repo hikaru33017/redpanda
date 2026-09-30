@@ -2,7 +2,7 @@
 
 export interface FamilyTreeMasterRecord {
   name: string;
-  statusLabel: '現在飼育' | '移動' | '死亡';
+  statusLabel: '現在飼育' | '移動' | 'お空組';
   gender: 'オス' | 'メス';
   birthDate: string | null;
   deathDate: string | null;
@@ -50,7 +50,7 @@ export const STATUS_COLORS = {
     badgeBg: '#f8eddf',
     badgeText: '#946031',
   },
-  死亡: {
+  お空組: {
     bar: '#7d827c',
     badgeBg: '#f1f0ec',
     badgeText: '#7d827c',

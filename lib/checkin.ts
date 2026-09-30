@@ -10,14 +10,12 @@ export type CheckinFailReason =
   | 'out_of_range'
   | 'already_stamped'
   | 'rarity_condition_not_met'
-  | 'qr_required'
 
 export type CheckinResult =
   | { success: true; record: StampRecord }
   | { success: false; reason: CheckinFailReason; message: string }
 
 export interface CheckinOptions {
-  qrVerified?: boolean
   now?: Date
 }
 
@@ -69,14 +67,6 @@ export function attemptCheckin(
       success: false,
       reason: 'already_stamped',
       message: `${point.facilityName}はすでにチェックイン済みです。`,
-    }
-  }
-
-  if (point.checkinMethod === 'qr_gps' && !options.qrVerified) {
-    return {
-      success: false,
-      reason: 'qr_required',
-      message: `${point.facilityName}はQRコードの読み取りが必要です。現地のQRコードをスキャンしてください。`,
     }
   }
 

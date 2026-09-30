@@ -1,7 +1,7 @@
 import type { TourPlanInput, TourPlan, TourActivity, InterestCategory } from './types'
-import planSpotsData from '@/docs/plan_spots_master.json'
+import unifiedSpotsData from '@/data/unified_spots_master.json'
 
-// plan_spots_master.jsonからデータを読み込み、カテゴリごとに整理
+// unified_spots_master.jsonからデータを読み込み、カテゴリごとに整理
 type SpotData = {
   id: string
   name: string
@@ -10,7 +10,7 @@ type SpotData = {
   suggestedMinutes: number
 }
 
-const spots = planSpotsData as SpotData[]
+const spots = unifiedSpotsData as SpotData[]
 
 // カテゴリマッピング
 const categoryMap: Record<string, InterestCategory | 'meal'> = {
@@ -125,6 +125,10 @@ export function generateTourPlan(input: TourPlanInput): TourPlan {
     })
   }
 
+  // 3時間以上のプランでは食事用の時間（50分）を確保
+  const mealBuffer = duration >= 3 ? 50 : 0
+  const effectiveMinutes = availableMinutes - mealBuffer
+
   // 候補から時間内に収まるものを繰り返し追加
   let addedCount = 0
   for (const act of candidateActivities) {
@@ -134,10 +138,10 @@ export function generateTourPlan(input: TourPlanInput): TourPlan {
       continue
     }
 
-    // 時間チェック（移動時間10分を考慮）
+    // 時間チェック（移動時間10分を考慮、3時間以上のプランでは食事用の時間も確保）
     const requiredTime = totalMinutes + act.duration + (selectedActivities.length > 0 ? 10 : 0)
-    if (requiredTime > availableMinutes) {
-      console.log(`  [時間不足] ${act.title} - 残り時間に収まらない (必要: ${requiredTime}分, 利用可能: ${availableMinutes}分)`)
+    if (requiredTime > effectiveMinutes) {
+      console.log(`  [時間不足] ${act.title} - 残り時間に収まらない (必要: ${requiredTime}分, 利用可能: ${effectiveMinutes}分)`)
       continue
     }
 
@@ -158,7 +162,7 @@ export function generateTourPlan(input: TourPlanInput): TourPlan {
   }
 
   // まだ時間が余っていれば、他のカテゴリからも追加
-  if (totalMinutes < availableMinutes * 0.8 && addedCount < 10) {
+  if (totalMinutes < effectiveMinutes * 0.8 && addedCount < 10) {
     console.log('時間が余っているため、他のスポットも追加します')
     const allActivities: TourActivity[] = []
     Object.values(ACTIVITIES).forEach(acts => {
@@ -172,7 +176,7 @@ export function generateTourPlan(input: TourPlanInput): TourPlan {
     for (const act of allActivities) {
       if (selectedSpotIds.has(act.title)) continue
       const requiredTime = totalMinutes + act.duration + 10
-      if (requiredTime > availableMinutes) continue
+      if (requiredTime > effectiveMinutes) continue
 
       // 営業時間チェック
       const arrivalTime = startHour * 60 + totalMinutes + 10
@@ -183,7 +187,7 @@ export function generateTourPlan(input: TourPlanInput): TourPlan {
       selectedActivities.push(act)
       selectedSpotIds.add(act.title)
       totalMinutes = requiredTime
-      console.log(`  [追加(補完)] ${act.title} ${act.duration}分 (累積: ${totalMinutes}分/${availableMinutes}分)`)
+      console.log(`  [追加(補完)] ${act.title} ${act.duration}分 (累積: ${totalMinutes}分/${effectiveMinutes}分)`)
     }
   }
 

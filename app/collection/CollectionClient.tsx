@@ -154,16 +154,8 @@ export function CollectionClient() {
       <header className="relative" style={{ background: '#5EC8D6' }}>
         <div className="max-w-lg mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            {/* Left side - Menu icon */}
-            <div className="flex flex-col items-center gap-1">
-              <div className="w-8 h-8 flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-              </div>
-            </div>
+            {/* Left side - spacer */}
+            <div className="w-8 h-8" />
 
             {/* Center - App title */}
             <div className="flex-1 text-center">
@@ -179,9 +171,12 @@ export function CollectionClient() {
                 className="flex flex-col items-center gap-1 text-white hover:opacity-80 transition-opacity"
               >
                 <div className="w-8 h-8 flex items-center justify-center">
-                  <span className="text-xl">📍</span>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
                 </div>
-                <span className="text-[9px] font-bold">マップ</span>
+                <span className="text-[9px] font-bold">スタンプ帳</span>
               </Link>
             </div>
           </div>

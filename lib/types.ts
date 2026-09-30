@@ -38,6 +38,7 @@ export interface LesserPanda {
   favoriteFood: string
   hobby: string
   photoUrl: string
+  photoPosition?: string
   parentIds: string[]
   childrenIds: string[]
   partnerId?: string
@@ -82,7 +83,7 @@ export interface FamilyTreeNode {
   children: FamilyTreeNode[]
 }
 
-export type CheckinMethod = 'gps' | 'qr_gps' | 'staff'
+export type CheckinMethod = 'gps' | 'staff'
 
 export type SpotRarity = 'common' | 'rare'
 
@@ -150,4 +151,26 @@ export interface AncestorPanda {
   partnerIds: string[]
   childrenIds: string[]
   isNishiyamaResident: boolean  // true: 西山で飼育された, false: 血縁関係のみで登場
+}
+
+export interface HistoricalPanda {
+  name: string
+  statusLabel: string
+  gender: string
+  birthDate: string
+  deathDate: string | null
+  ageAtDeathOrLastRecord: number
+  transferDate: string | null
+  transferDestination: string | null
+  arrivalDate: string | null
+  arrivalOrigin: string | null
+  father: string | null
+  mother: string | null
+  partners: string[]
+  personality: string | null
+  notes: string | null
+}
+
+export interface HistoricalPandaWithId extends HistoricalPanda {
+  id: string
 }

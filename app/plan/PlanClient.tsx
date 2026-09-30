@@ -28,21 +28,20 @@ const CATEGORY_COLORS: Record<string, string> = {
   rest: 'bg-gray-50 text-gray-400',
 }
 
-// Map activity titles to spot IDs for linking to stamps page
+// Map activity titles (spot names from unified_spots_master.json) to spot IDs
 const SPOT_ID_MAP: Record<string, string> = {
-  '西山動物園': 'nishiyama-zoo',
+  '西山動物園（レッサーパンダの家）': 'nishiyama-zoo',
   'パンダらんど（アスレチックフィールド）': 'panda-land',
   '嚮陽庭園': 'kyoyo-teien',
-  '展望台': 'observatory',
+  '展望台広場（愛の鐘）': 'observatory-love-bell',
   '大噴水': 'big-fountain',
-  '愛の鐘': 'love-bell',
-  '泰澄大師の像': 'taicho-statue',
-  'パンダハウス': 'panda-house',
-  'いちほまれテラス': 'ichihomare-terrace',
-  'レッサーパンダのモニュメント': 'lesser-panda-monument',
-  '道の駅西山公園': 'michinoeki',
-  '日野川の風景': 'hinokawa',
-  '歴史の小径': 'history-path',
+  '結びの広場（結びのチャイム）': 'musubi-chime',
+  '芝生広場（お祭り広場）': 'lawn-plaza',
+  '道の駅西山公園': 'michinoeki-nishiyama',
+  'まなべの館': 'manabe-hall',
+  '祈りの道': 'inori-no-michi',
+  '西山橋': 'nishiyama-bridge',
+  '眼鏡型の時計モニュメント': 'megane-clock',
 }
 
 export function PlanClient() {
@@ -65,19 +64,44 @@ export function PlanClient() {
 
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #FFE5F5 0%, #E5F0FF 50%, #FFF5E5 100%)' }}>
-      <div className="max-w-3xl mx-auto px-4 py-12">
-        <div className="text-center mb-10 animate-fade-in-up">
-          <div className="flex items-start justify-center gap-3 mb-3">
-            <div className="w-20 h-20 animate-float-slow">
-              <Image src="/illustrations/panda-peek-log.png" alt="" width={80} height={80} style={{ objectFit: 'contain' }} />
+      {/* Collection-style header */}
+      <header className="relative" style={{ background: '#D4A5D9' }}>
+        <div className="max-w-lg mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            {/* Left - back link */}
+            <Link href="/" className="flex flex-col items-center gap-1 text-white hover:opacity-80 transition-opacity">
+              <div className="w-8 h-8 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </div>
+              <span className="text-[9px] font-bold">もどる</span>
+            </Link>
+
+            {/* Center - title */}
+            <div className="flex-1 text-center">
+              <h1 className="text-2xl font-extrabold text-white" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                観光プラン作成
+              </h1>
             </div>
-            <h1 className="text-3xl font-bold" style={{ color: '#D4A5D9' }}>
-              観光プランを作る
-            </h1>
-            <div className="w-20 h-20 animate-float-slow" style={{ animationDelay: '0.5s' }}>
-              <Image src="/illustrations/panda-peek-log.png" alt="" width={80} height={80} style={{ objectFit: 'contain', transform: 'scaleX(-1)' }} />
+
+            {/* Right - panda illustration */}
+            <div className="w-8 h-8 flex items-center justify-center">
+              <Image src="/illustrations/panda-peek-log.png" alt="" width={32} height={32} style={{ objectFit: 'contain' }} />
             </div>
           </div>
+        </div>
+
+        {/* Wave bottom edge */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden" style={{ lineHeight: 0 }}>
+          <svg viewBox="0 0 1200 60" preserveAspectRatio="none" style={{ width: '100%', height: '30px' }}>
+            <path d="M0,30 Q300,0 600,30 T1200,30 L1200,60 L0,60 Z" fill="white" />
+          </svg>
+        </div>
+      </header>
+
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        <div className="text-center mb-8 animate-fade-in-up">
           <p className="text-gray-600">
             あなたにぴったりの西山公園プランを自動生成します
           </p>
@@ -223,7 +247,11 @@ export function PlanClient() {
                             className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all hover:scale-105"
                             style={{ background: 'rgba(168, 200, 232, 0.2)', color: '#A8C8E8' }}
                           >
-                            <span>🗺️</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+                              <line x1="9" y1="3" x2="9" y2="18" />
+                              <line x1="15" y1="6" x2="15" y2="21" />
+                            </svg>
                             地図で見る
                           </Link>
                         )}
