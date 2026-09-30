@@ -71,8 +71,8 @@ export function PlanClient() {
             <div className="w-20 h-20 animate-float-slow">
               <Image src="/illustrations/panda-peek-log.png" alt="" width={80} height={80} style={{ objectFit: 'contain' }} />
             </div>
-            <h1 className="text-3xl font-bold" style={{ color: '#D4A5D9' }}>
-              観光プラン作成
+            <h1 className="text-3xl font-bold leading-tight text-center" style={{ color: '#D4A5D9' }}>
+              観光プラン<br />作成
             </h1>
             <div className="w-20 h-20 animate-float-slow" style={{ animationDelay: '0.5s' }}>
               <Image src="/illustrations/panda-peek-log.png" alt="" width={80} height={80} style={{ objectFit: 'contain', transform: 'scaleX(-1)' }} />
