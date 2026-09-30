@@ -78,7 +78,12 @@ export function PlanClient() {
               <Image src="/illustrations/panda-peek-log.png" alt="" width={80} height={80} style={{ objectFit: 'contain', transform: 'scaleX(-1)' }} />
             </div>
           </div>
-          <p className="text-gray-600">
+          <p
+            className="text-gray-600 leading-tight"
+            style={{
+              fontSize: 'clamp(0.875rem, 1rem, 1rem)'
+            }}
+          >
             あなたにぴったりの西山公園プランを自動生成する
           </p>
         </div>
@@ -181,7 +186,15 @@ export function PlanClient() {
                 <div className="w-10 h-10 animate-float-slow">
                   <Image src="/illustrations/panda-eating-apple.png" alt="" width={40} height={40} style={{ objectFit: 'contain' }} />
                 </div>
-                <h2 className="text-xl font-bold" style={{ color: '#D4A5D9' }}>{plan.title}</h2>
+                <h2
+                  className="font-bold leading-tight"
+                  style={{
+                    color: '#D4A5D9',
+                    fontSize: `clamp(1rem, ${Math.max(1, 2.5 - plan.title.length * 0.02)}rem, 1.25rem)`
+                  }}
+                >
+                  {plan.title}
+                </h2>
               </div>
               <p className="text-sm text-gray-600 mb-6">{plan.summary}</p>
 
